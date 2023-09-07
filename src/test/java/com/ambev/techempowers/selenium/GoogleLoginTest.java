@@ -33,28 +33,6 @@ public class GoogleLoginTest {
             emailInput.sendKeys("java");
             emailInput.sendKeys(Keys.RETURN );
 
-            // Click the "Next" button to proceed to the password input
-            WebElement nextButton = driver.findElement(By.id("identifierNext"));
-            nextButton.click();
-
-            // Wait for the password input field to be visible
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement passwordInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("password")));
-
-            // Enter your Google account password
-            passwordInput.sendKeys("your_password");
-
-            // Click the "Next" button to log in
-            WebElement passwordNextButton = driver.findElement(By.id("passwordNext"));
-            passwordNextButton.click();
-
-            // Wait for a while to see the result before closing the browser
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             // Close the browser
             driver.quit();
         }
