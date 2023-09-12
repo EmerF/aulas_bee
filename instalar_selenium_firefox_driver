@@ -1,0 +1,7 @@
+#executar os comando abaixo para rodar o firefox no docker
+#após a execução, abrir no browser http://localhost:4444
+# rodar o teste no selenium
+# abrir a parte sessions.
+# Qdo pedir a senha, informar: secret
+docker pull selenium/standalone-firefox
+docker run -d -p 4444:4444 --name selenium-firefox selenium/standalone-firefox

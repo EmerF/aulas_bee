@@ -1,60 +1,42 @@
 package com.ambev.techempowers.selenium;
 
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.time.Duration;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-
+/* Instruções para execução:
+* Instalar o firefox no docker usando o arquivo instalar_selenium_firefox_driver
+* Rodar o teste
+* verificar no localhost:4444/sessions a execução do teste
+* */
 public class GoogleLoginTest {
 
         @Test
-        public void testLogin() {
-            // Set the path to your WebDriver executable
-            System.setProperty("webdriver.chrome.driver", "/home/emerson/Área de Trabalho/chromedriver");
+        public void testLogin() throws MalformedURLException {
+             // Set the URL of the Selenium Server
 
-            // Create a Chrome WebDriver instance
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--start-maximized"); // Start Chrome maximized
-            WebDriver driver = new ChromeDriver(options);
+            String seleniumHubURL = "http://localhost:4444/wd/hub";
 
-            // Navigate to the Google login page
-            driver.get("https://accounts.google.com");
+            // Define desired capabilities for the browser and platform
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setBrowserName("firefox"); // Use "firefox" for Firefox browser
+            capabilities.setCapability("version", "76.0");
+            capabilities.setPlatform(Platform.ANY);
 
-            // Find the "Email or phone" input field and enter your Google email address
-            WebElement emailInput = driver.findElement(By.id("identifierId"));
-            emailInput.sendKeys("your_email@gmail.com");
 
-            // Click the "Next" button to proceed to the password input
-            WebElement nextButton = driver.findElement(By.id("identifierNext"));
-            nextButton.click();
+            // Create a Remote WebDriver instance
+            WebDriver driver = new RemoteWebDriver(new URL(seleniumHubURL), capabilities);
+            driver.get("http://globo.com");
+            // Your test code here...
+            // senha do sessions do selenium (http://localhost:4444): secret
+            // Close the WebDriver
+            //driver.quit();
 
-            // Wait for the password input field to be visible
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            WebElement passwordInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("password")));
-
-            // Enter your Google account password
-            passwordInput.sendKeys("your_password");
-
-            // Click the "Next" button to log in
-            WebElement passwordNextButton = driver.findElement(By.id("passwordNext"));
-            passwordNextButton.click();
-
-            // Wait for a while to see the result before closing the browser
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            // Close the browser
-            driver.quit();
         }
     }
 
