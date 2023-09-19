@@ -5,14 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+
 @ControllerAdvice
 public class ExceptionHandlerController {
 
     @ExceptionHandler(CustomNotFoundException.class)
     public ResponseEntity<String> handleCustomNotFoundException(CustomNotFoundException ex) {
-        //return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGenericException(Exception ex) {
