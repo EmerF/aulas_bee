@@ -1,6 +1,6 @@
 package com.ambev.techempowers.model;
 
-public class Alimento extends Produto {
+public class Alimento extends ProdutoOld {
     private String dataValidade;
 
     public Alimento(String nome, double preco, String dataValidade) {
