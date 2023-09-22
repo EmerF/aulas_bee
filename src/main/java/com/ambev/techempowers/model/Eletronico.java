@@ -1,6 +1,6 @@
 package com.ambev.techempowers.model;
 
-public class Eletronico extends Produto {
+public class Eletronico extends ProdutoOld {
     private String modelo;
     private String marca;
 

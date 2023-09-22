@@ -1,6 +1,6 @@
 package com.ambev.techempowers.model;
 
-public class Roupa  extends Produto{
+public class Roupa  extends ProdutoOld{
     private String tamanho;
     private String tipoTecido;
     private String marca;
