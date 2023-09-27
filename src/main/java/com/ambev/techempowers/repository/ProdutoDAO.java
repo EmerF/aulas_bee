@@ -1,6 +1,7 @@
 package com.ambev.techempowers.repository;
 
 import com.ambev.techempowers.model.Produto;
+import jakarta.annotation.PreDestroy;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,21 +13,24 @@ public class ProdutoDAO {
 
     public int salvarProduto(Produto produto) throws SQLException {
         String sql = "INSERT INTO produtos (nome, preco) VALUES (?, ?)";
+        criarConexao();
 
         //DriverManager.getConnection(url, usuario, senha
         PreparedStatement pstmt = conn.prepareStatement(sql);
 
         pstmt.setString(1, produto.getNome());
         pstmt.setDouble(2, produto.getPreco());
+
+
         return pstmt.executeUpdate();
 
     }
 
-        public void criarConexao() throws SQLException {
+        private void criarConexao() throws SQLException {
             conn = mysqlConn.createConnection();
         }
-
-        public void fecharConexao() throws SQLException {
+        @PreDestroy
+        private void fecharConexao() throws SQLException {
             this.conn.close();
         }
     }

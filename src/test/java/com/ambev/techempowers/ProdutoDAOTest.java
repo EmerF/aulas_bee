@@ -26,15 +26,11 @@ public class ProdutoDAOTest {
         // criar o produtoDao
         ProdutoDAO produtoDAO = new ProdutoDAO();
 
-        // criar conexão()
-        produtoDAO.criarConexao();
-
         // persistir os dados
         int idProd = produtoDAO.salvarProduto(produto);
+
         assertNotNull(idProd);
 
-        // fechar conexão
-        produtoDAO.fecharConexao();
 
     }
 }
