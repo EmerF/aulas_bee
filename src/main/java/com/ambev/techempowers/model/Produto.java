@@ -1,14 +1,36 @@
 package com.ambev.techempowers.model;
 
+import com.ambev.techempowers.interfaces.Gerenciavel;
+import com.ambev.techempowers.interfaces.Perecivel;
 import jakarta.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "produtos")
-public class Produto {
+public class Produto implements Perecivel, Gerenciavel {
     @Id
     private String id;
     private String nome;
     private double preco;
+
+    private Tipo tipo;
+
+    @Override
+    public double calcularPreco() {
+        return 0;
+    }
+
+    @Override
+    public void exibirDetalhes() {
+
+    }
+
+    @Override
+    public boolean verificarSeEstaVencido() {
+        return false;
+    }
+
+
+
 
     public String getNome() {
         return nome;
@@ -33,6 +55,8 @@ public class Produto {
     public void setId(String id) {
         this.id = id;
     }
+
+
 
     // getters e setters
 }
