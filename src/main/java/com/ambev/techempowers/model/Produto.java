@@ -1,36 +1,27 @@
 package com.ambev.techempowers.model;
 
-import com.ambev.techempowers.interfaces.Gerenciavel;
-import com.ambev.techempowers.interfaces.Perecivel;
 import jakarta.persistence.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "produtos")
-public class Produto implements Perecivel, Gerenciavel {
+@Document
+public class Produto {
+
     @Id
     private String id;
     private String nome;
+    private String descricao;
     private double preco;
+    @DBRef
+    private TipoProduto tipo;
 
-    private Tipo tipo;
-
-    @Override
-    public double calcularPreco() {
-        return 0;
+    public String getId() {
+        return id;
     }
 
-    @Override
-    public void exibirDetalhes() {
-
+    public void setId(String id) {
+        this.id = id;
     }
-
-    @Override
-    public boolean verificarSeEstaVencido() {
-        return false;
-    }
-
-
-
 
     public String getNome() {
         return nome;
@@ -38,6 +29,14 @@ public class Produto implements Perecivel, Gerenciavel {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
     public double getPreco() {
@@ -48,15 +47,13 @@ public class Produto implements Perecivel, Gerenciavel {
         this.preco = preco;
     }
 
-    public String getId() {
-        return id;
+    public TipoProduto getTipo() {
+        return tipo;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setTipo(TipoProduto tipo) {
+        this.tipo = tipo;
     }
 
-
-
-    // getters e setters
+    // Getters e setters
 }
