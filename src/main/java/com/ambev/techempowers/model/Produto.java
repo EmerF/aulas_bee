@@ -12,9 +12,6 @@ public class Produto {
     private String nome;
     private String descricao;
     private double preco;
-    @DBRef
-    private TipoProduto tipo;
-
     public String getId() {
         return id;
     }
@@ -47,13 +44,5 @@ public class Produto {
         this.preco = preco;
     }
 
-    public TipoProduto getTipo() {
-        return tipo;
-    }
 
-    public void setTipo(TipoProduto tipo) {
-        this.tipo = tipo;
-    }
-
-    // Getters e setters
 }

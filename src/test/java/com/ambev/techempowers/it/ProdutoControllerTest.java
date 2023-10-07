@@ -60,11 +60,6 @@ public class ProdutoControllerTest {
         cerveja.setDescricao("Cerveja de teste");
         cerveja.setPreco(5.99);
         ((Cerveja) cerveja).setTemAlcool(true);
-        TipoProduto tipoProduto = new TipoProduto();
-        tipoProduto.setDescricao("Nacional");
-
-        tipoProdutoRepository.save(tipoProduto);
-        cerveja.setTipo(tipoProduto);
         String produtoJson = objectMapper.writeValueAsString(cerveja);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/produtos")
@@ -122,3 +117,4 @@ public class ProdutoControllerTest {
     }
 
 }
+
