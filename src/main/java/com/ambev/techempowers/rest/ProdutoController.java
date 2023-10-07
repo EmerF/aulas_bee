@@ -1,5 +1,6 @@
 package com.ambev.techempowers.rest;
 
+import com.ambev.techempowers.message.ProdutoEventProducer;
 import com.ambev.techempowers.model.Produto;
 import com.ambev.techempowers.model.TipoProduto;
 import com.ambev.techempowers.repository.ProdutoRepository;
@@ -14,28 +15,40 @@ import java.util.List;
 
 /** Teste:
  * curl -X POST -H "Content-Type: application/json" -d '{
- *   "name": "Produto de Exemplo",
- *   "price": 29.99
+ *   "nome": "Produto de Exemplo",
+ *    "descricao": "desc de exemplo",
+ *   "preco": 29.99
  * }' http://localhost:8080/api/products
  *
  */
+
+
+ /*curl -X POST -H "Content-Type: application/json" -d '{
+         "nome": "Produto de Exemplo",
+         "descricao": "desc de exemplo",
+         "preco": 29.99
+         }' http://localhost:8080/api/produtos*/
+
 @RestController
 @RequestMapping("/api/produtos")
 public class ProdutoController {
 
     private final ProdutoRepository produtoRepository;
-    private final TipoProdutoRepository tipoRepository;
+    private final ProdutoEventProducer eventProducer;
+
+
 
     @Autowired
-    public ProdutoController(ProdutoRepository produtoRepository, TipoProdutoRepository tipoRepository) {
+    public ProdutoController(ProdutoRepository produtoRepository,  ProdutoEventProducer eventProducer) {
         this.produtoRepository = produtoRepository;
-        this.tipoRepository = tipoRepository;
+        this.eventProducer = eventProducer;
     }
     @Autowired
     private ProdutoService produtoService;
 
     @PostMapping
     public Produto cadastrarProduto(@RequestBody Produto produto) {
+        eventProducer.sendProductSavedEvent(produto.getNome());
         return produtoRepository.save(produto);
     }
 
