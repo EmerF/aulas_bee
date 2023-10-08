@@ -1,10 +1,8 @@
 package com.ambev.techempowers.rest;
 
-import com.ambev.techempowers.message.ProdutoEventProducer;
+import com.ambev.techempowers.message.MessageProducer;
 import com.ambev.techempowers.model.Produto;
-import com.ambev.techempowers.model.TipoProduto;
 import com.ambev.techempowers.repository.ProdutoRepository;
-import com.ambev.techempowers.repository.TipoProdutoRepository;
 import com.ambev.techempowers.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,21 +32,23 @@ import java.util.List;
 public class ProdutoController {
 
     private final ProdutoRepository produtoRepository;
-    private final ProdutoEventProducer eventProducer;
+    //private final ProdutoEventProducer eventProducer;
 
+    private final MessageProducer messageProducer;
 
 
     @Autowired
-    public ProdutoController(ProdutoRepository produtoRepository,  ProdutoEventProducer eventProducer) {
+    public ProdutoController(ProdutoRepository produtoRepository, MessageProducer messageProducer) {
         this.produtoRepository = produtoRepository;
-        this.eventProducer = eventProducer;
+        this.messageProducer = messageProducer;
     }
     @Autowired
     private ProdutoService produtoService;
 
     @PostMapping
     public Produto cadastrarProduto(@RequestBody Produto produto) {
-        eventProducer.sendProductSavedEvent(produto.getNome());
+        //eventProducer.sendProductSavedEvent(produto.getNome());
+        messageProducer.sendMessage(String.format("Produto %s cadastrado com sucesso !",produto.toString()));
         return produtoRepository.save(produto);
     }
 
