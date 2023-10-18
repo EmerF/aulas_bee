@@ -42,7 +42,7 @@ $body = @{
 
 ----------------- Rodar spring app in container-------------------------
 # Use an official OpenJDK runtime as a parent image
-FROM openjdk:11-jre-slim
+FROM adoptopenjdk:17-jre-slim
 
 # Set the working directory in the container
 WORKDIR /app
@@ -57,5 +57,16 @@ EXPOSE 8080
 CMD ["java", "-jar", "app.jar"]
 
 ---
-docker build -t your-spring-boot-image .
-docker run -d -p 8080:8080 your-spring-boot-image
+docker build -t tech-bee-image .
+docker run -d -p 8080:8080 tech-bee-image
+
+docker image rm -f tech-bee-image; docker build -t tech-bee-image . ; docker run -d -p 8080:8080 tech-bee-image
+
+# Rodar com docker compose
+docker-compose up --build
+
+
+Passos para  executar
+1 criar o docker file com o conteúdo para rodar app
+2 criar o docker compose com o conteúdo para rodar a app + o mongo
+3 rodar comando docker-compose up --build
