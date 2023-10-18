@@ -3,6 +3,27 @@ docker ps -a
 docker stop 29ab138a6c8c -->id
 docker rm 29ab138a6c8c --> id
 
+docker rm -f CONTAINER_NAME
+
+rodar o mongo:
+docker ps -a
+docker stop 29ab138a6c8c -->id
+docker rm 29ab138a6c8c --> id
+
+docker run -d -p 27017:27017 --name meumongo mongo
+
+------------- Comando para windows ------------------------
+$headers = @{
+    "Content-Type" = "application/json"
+}
+
+$body = @{
+    nome = "Produto de Exemplo"
+    descricao = "desc de exemplo"
+    preco = 29.99
+} | ConvertTo-Json
+-----------------------------------------------------------
+
 1 - docker run -d --name rabbitmq-container -p 5672:5672 -p 15672:15672 rabbitmq:management
 2 - abrir http://localhost:15672/
 3 - usuario/senha: guest
@@ -18,3 +39,23 @@ docker rm 29ab138a6c8c --> id
    "preco": 29.99
    }' http://localhost:8080/api/produtos
 4 - abrir o icone de run da classe consumer e ver as mensagens no log
+
+----------------- Rodar spring app in container-------------------------
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:11-jre-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the Spring Boot application JAR file into the container
+COPY target/your-spring-boot-app.jar app.jar
+
+# Expose port 8080 (the default port for Spring Boot applications)
+EXPOSE 8080
+
+# Define the command to run the application
+CMD ["java", "-jar", "app.jar"]
+
+---
+docker build -t your-spring-boot-image .
+docker run -d -p 8080:8080 your-spring-boot-image

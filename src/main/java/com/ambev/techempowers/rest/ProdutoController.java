@@ -36,14 +36,14 @@ public class ProdutoController {
 
     private final MessageProducer messageProducer;
 
+    @Autowired
+    private ProdutoService produtoService;
 
     @Autowired
     public ProdutoController(ProdutoRepository produtoRepository, MessageProducer messageProducer) {
         this.produtoRepository = produtoRepository;
         this.messageProducer = messageProducer;
     }
-    @Autowired
-    private ProdutoService produtoService;
 
     @PostMapping
     public Produto cadastrarProduto(@RequestBody Produto produto) {
