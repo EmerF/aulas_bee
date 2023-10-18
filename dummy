@@ -56,7 +56,7 @@ EXPOSE 8080
 # Define the command to run the application
 CMD ["java", "-jar", "app.jar"]
 
----
+------------------- Construir imagem da app ----------------------------------
 docker build -t tech-bee-image .
 docker run -d -p 8080:8080 tech-bee-image
 
@@ -65,10 +65,23 @@ docker image rm -f tech-bee-image; docker build -t tech-bee-image . ; docker run
 # Rodar com docker compose
 docker-compose up --build
 
+# Instalar docker compose ubuntu
 
-Passos para  executar
-0 - mvn clean --> limpar jar desatualizados
-0 - mvn clean install -DskipTests --> instalar novamente com novas configs
-1 criar o docker file com o conteúdo para rodar app
-2 criar o docker compose com o conteúdo para rodar a app + o mongo
-3 rodar comando docker-compose up --build
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+
+#Windows
+https://www.docker.com/products/docker-desktop/
+
+
+----------------------Passos para  executar via docker compose ---------------------------------------------------------
+
+1 - mvn clean --> limpar jar desatualizados
+2 - mvn clean install -DskipTests --> instalar novamente com novas configs
+3 - criar o docker file com o conteúdo para rodar app
+4 - criar o docker compose com o conteúdo para rodar a app + o mongo
+5 - rodar comando docker-compose up --build
+6 - parar execução docker-compose down
+** Se alterar o código, refazer todos os passos..
+------------------------------------------------------------------------------------------------------------------------
