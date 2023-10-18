@@ -48,7 +48,7 @@ public class ProdutoController {
     @PostMapping
     public Produto cadastrarProduto(@RequestBody Produto produto) {
         //eventProducer.sendProductSavedEvent(produto.getNome());
-        //messageProducer.sendMessage(String.format("Produto %s cadastrado com sucesso !",produto.toString()));
+        messageProducer.sendMessage(String.format("Produto %s cadastrado com sucesso !",produto.toString()));
         return produtoRepository.save(produto);
     }
 

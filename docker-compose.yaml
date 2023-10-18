@@ -7,9 +7,17 @@ services:
       - "8080:8080"  # Map the Spring Boot app's port to the host
     depends_on:
       - mongo_db  # Ensure the Spring Boot app starts after the MongoDB container
+      - rabbitmq  # Added dependency on the rabbitmq service      -
 
   mongo_db:
     image: mongo:latest
     restart: always # Use the official MongoDB image
     ports:
       - "27017:27017"  # Map the MongoDB port to the host
+  rabbitmq:
+    image: "rabbitmq:management"  # Use the RabbitMQ image with the management plugin
+    ports:
+      - "5672:5672"  # RabbitMQ messaging port
+      - "15672:15672"  # RabbitMQ management plugin port
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "unique-cookie-value"  # Replace with a secure cookie value
