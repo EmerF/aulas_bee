@@ -67,6 +67,7 @@ docker-compose up --build
 
 
 Passos para  executar
+0 - mvn clean install -DskipTests
 1 criar o docker file com o conteúdo para rodar app
 2 criar o docker compose com o conteúdo para rodar a app + o mongo
 3 rodar comando docker-compose up --build
