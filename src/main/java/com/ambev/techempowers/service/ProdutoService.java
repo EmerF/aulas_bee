@@ -1,7 +1,9 @@
 package com.ambev.techempowers.service;
 
+import com.ambev.techempowers.dto.ProdutoDTO;
 import com.ambev.techempowers.model.Produto;
 import com.ambev.techempowers.repository.ProdutoRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.Optional;
 @Service
 public class ProdutoService {
     private final ProdutoRepository produtoRepository;
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     public ProdutoService(ProdutoRepository produtoRepository) {
@@ -30,6 +33,14 @@ public class ProdutoService {
 
     public List<Produto> consultarPorNome(String nome) {
         return produtoRepository.findByNome(nome);
+    }
+
+    public ProdutoDTO convertToDTO(Produto produto) {
+        return modelMapper.map(produto, ProdutoDTO.class);
+    }
+
+    public Produto convertToProduto(ProdutoDTO produtoDTO) {
+        return modelMapper.map(produtoDTO, Produto.class);
     }
 
     // Outros métodos de serviço, como buscar, atualizar e excluir produtos

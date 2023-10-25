@@ -81,6 +81,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>3.1.1</version> <!-- Substitua pela versão mais recente -->
+        </dependency>
+
 
     </dependencies>
 

@@ -1,5 +1,6 @@
 package com.ambev.techempowers.rest;
 
+import com.ambev.techempowers.dto.ProdutoDTO;
 import com.ambev.techempowers.message.MessageProducer;
 import com.ambev.techempowers.model.Produto;
 import com.ambev.techempowers.repository.ProdutoRepository;
@@ -46,10 +47,10 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public Produto cadastrarProduto(@RequestBody Produto produto) {
+    public Produto cadastrarProduto(@RequestBody ProdutoDTO produto) {
         //eventProducer.sendProductSavedEvent(produto.getNome());
         messageProducer.sendMessage(String.format("Produto %s cadastrado com sucesso !",produto.toString()));
-        return produtoRepository.save(produto);
+        return produtoRepository.save(produtoService.convertToProduto(produto));
     }
 
     @GetMapping("/consultar/{nome}")
