@@ -14,7 +14,7 @@ class TechEmpowersApplicationTests {
 
 	@Test
 	void contextLoads() {
-		System.out.println("Hoje o baguio ta loko");
+		System.out.println("Hoje o baguio ta");
 	}
 
 	@Test
