@@ -83,5 +83,6 @@ https://www.docker.com/products/docker-desktop/
 4 - criar o docker compose com o conteúdo para rodar a app + o mongo
 5 - rodar comando docker-compose up --build
 6 - parar execução docker-compose down
-** Se alterar o código, refazer todos os passos...
+** Se alterar o código, refazer todos os passos....
+
 ------------------------------------------------------------------------------------------------------------------------
