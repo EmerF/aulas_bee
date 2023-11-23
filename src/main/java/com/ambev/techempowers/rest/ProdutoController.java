@@ -43,7 +43,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public Produto cadastrarProduto(@RequestBody ProdutoDTO produto) {
+    public ProdutoDTO cadastrarProduto(@RequestBody ProdutoDTO produto) {
         //eventProducer.sendProductSavedEvent(produto.getNome());
         messageProducer.sendMessage(String.format("Produto %s cadastrado com sucesso !",produto.toString()));
         return produtoService.salvarProduto(produto);

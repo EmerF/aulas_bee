@@ -33,9 +33,9 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public Produto salvarProduto(ProdutoDTO produtoDTO) {
+    public ProdutoDTO salvarProduto(ProdutoDTO produtoDTO) {
         Produto produto = convertToProduto(produtoDTO);
-        return produtoRepository.save(produto);
+        return convertToDTO(produtoRepository.save(produto));
     }
 
     public Optional<Produto> findById(String id) {

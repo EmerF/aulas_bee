@@ -2,6 +2,7 @@ package com.ambev.techempowers.dto;
 
 public class ProdutoDTO {
 
+    private String id;
     private String nome;
     private String descricao;
     private double preco;
@@ -28,5 +29,13 @@ public class ProdutoDTO {
 
     public void setPreco(double preco) {
         this.preco = preco;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
