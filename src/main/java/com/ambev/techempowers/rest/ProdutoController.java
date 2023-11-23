@@ -32,17 +32,13 @@ import java.util.List;
 @RequestMapping("/api/produtos")
 public class ProdutoController {
 
-    private final ProdutoRepository produtoRepository;
-    //private final ProdutoEventProducer eventProducer;
-
     private final MessageProducer messageProducer;
 
     @Autowired
     private ProdutoService produtoService;
 
     @Autowired
-    public ProdutoController(ProdutoRepository produtoRepository, MessageProducer messageProducer) {
-        this.produtoRepository = produtoRepository;
+    public ProdutoController(MessageProducer messageProducer) {
         this.messageProducer = messageProducer;
     }
 
@@ -50,7 +46,7 @@ public class ProdutoController {
     public Produto cadastrarProduto(@RequestBody ProdutoDTO produto) {
         //eventProducer.sendProductSavedEvent(produto.getNome());
         messageProducer.sendMessage(String.format("Produto %s cadastrado com sucesso !",produto.toString()));
-        return produtoRepository.save(produtoService.convertToProduto(produto));
+        return produtoService.salvarProduto(produto);
     }
 
     @GetMapping("/consultar/{nome}")
@@ -66,4 +62,15 @@ public class ProdutoController {
     public ResponseEntity errorProduct() {
         return new ResponseEntity<>( HttpStatus.NOT_FOUND);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Produto> atualizarProduto(@PathVariable String id, @RequestBody ProdutoDTO produtoAtualizar) {
+        Produto produtoAtual = produtoService.atualizarProduto(id, produtoAtualizar);
+        if (produtoAtual != null) {
+            return new ResponseEntity<>(produtoAtual, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

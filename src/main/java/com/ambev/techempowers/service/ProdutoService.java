@@ -3,9 +3,9 @@ package com.ambev.techempowers.service;
 import com.ambev.techempowers.dto.ProdutoDTO;
 import com.ambev.techempowers.model.Produto;
 import com.ambev.techempowers.repository.ProdutoRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +20,23 @@ public class ProdutoService {
         this.produtoRepository = produtoRepository;
     }
 
+    public ProdutoDTO convertToDTO(Produto produto) {
+        return modelMapper.map(produto, ProdutoDTO.class);
+    }
+
+    public Produto convertToProduto(ProdutoDTO produtoDTO) {
+        return modelMapper.map(produtoDTO, Produto.class);
+    }
+
+
     public Produto salvarProduto(Produto produto) {
         return produtoRepository.save(produto);
     }
 
-
+    public Produto salvarProduto(ProdutoDTO produtoDTO) {
+        Produto produto = convertToProduto(produtoDTO);
+        return produtoRepository.save(produto);
+    }
 
     public Optional<Produto> findById(String id) {
         return produtoRepository.findById(id);
@@ -35,13 +47,26 @@ public class ProdutoService {
         return produtoRepository.findByNome(nome);
     }
 
-    public ProdutoDTO convertToDTO(Produto produto) {
-        return modelMapper.map(produto, ProdutoDTO.class);
+
+    public Produto atualizarProduto(String id, ProdutoDTO produtoAtualizado) {
+        // Verificar se o produto com o ID fornecido existe
+        Produto produtoExistente = produtoRepository.findById(id).orElse(null);
+
+        if (produtoExistente != null) {
+            // Atualizar os campos necessários
+            produtoExistente.setNome(produtoAtualizado.getNome());
+            produtoExistente.setDescricao(produtoAtualizado.getDescricao());
+            produtoExistente.setPreco(produtoAtualizado.getPreco());
+
+            // Salvar o produto atualizado
+            return produtoRepository.save(produtoExistente);
+        } else {
+            // Produto não encontrado
+            return null;
+        }
     }
 
-    public Produto convertToProduto(ProdutoDTO produtoDTO) {
-        return modelMapper.map(produtoDTO, Produto.class);
-    }
+
 
     // Outros métodos de serviço, como buscar, atualizar e excluir produtos
 }
