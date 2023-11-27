@@ -41,7 +41,7 @@ public class ProdutoControllerTest {
     @BeforeEach
     public void setUp() {
         // Limpar o banco de dados antes de cada teste
-       // produtoRepository.deleteAll();
+       produtoRepository.deleteAll();
     }
     @Test
     public void testRecursoNaoEncontrado() throws Exception {
@@ -54,8 +54,8 @@ public class ProdutoControllerTest {
     @Test
     public void testCadastrarProdutoEVerificarCadastro() throws Exception {
         ProdutoDTO produtoDTO = new ProdutoDTO();
-        produtoDTO.setNome("Test Product");
-        produtoDTO.setDescricao("Test Description");
+        produtoDTO.setNome("ProdutoIT");
+        produtoDTO.setDescricao("ProdutoIT Descrição");
         produtoDTO.setPreco(9.99);
         String produtoJson = objectMapper.writeValueAsString(produtoDTO);
 
@@ -65,7 +65,7 @@ public class ProdutoControllerTest {
                 .andExpect(status().isOk());
 
         // Verify if the product was saved in MongoDB
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/produtos/consultar/{nome}", "Test Product"))
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/produtos/consultar/{nome}", produtoDTO.getNome()))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -77,48 +77,50 @@ public class ProdutoControllerTest {
     }
 
 
-    @Test
-    public void testCadastrarProdutoEVerificarCadastro2() throws Exception {
-        ProdutoDTO cerveja = new ProdutoDTO();
-        cerveja.setNome("Cerveja Teste");
-        cerveja.setDescricao("Cerveja de teste");
-        cerveja.setPreco(5.99);
-        String produtoJson = objectMapper.writeValueAsString(cerveja);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/produtos")
+    @Test
+    public void testAtualizarProduto() throws Exception {
+        // Cadastrar um produto para ser atualizado
+        ProdutoDTO produtoDTO = new ProdutoDTO();
+        produtoDTO.setNome("ProdutoIT");
+        produtoDTO.setDescricao("ProdutoIT Descrição");
+        produtoDTO.setPreco(9.99);
+        String produtoJson = objectMapper.writeValueAsString(produtoDTO);
+
+        MvcResult cadastrarResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/produtos")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(produtoJson))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Extrair o ID do produto cadastrado
+        String id = objectMapper.readTree(cadastrarResult.getResponse().getContentAsString()).get("id").textValue();
+
+        // Atualizar o produto
+        ProdutoDTO produtoAtualizadoDTO = new ProdutoDTO();
+        produtoAtualizadoDTO.setNome("ProdutoIT Atualizado");
+        produtoAtualizadoDTO.setDescricao("ProdutoIT Descrição Atualizada");
+        produtoAtualizadoDTO.setPreco(19.99);
+        String produtoAtualizadoJson = objectMapper.writeValueAsString(produtoAtualizadoDTO);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/produtos/{id}", id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(produtoAtualizadoJson))
                 .andExpect(status().isOk());
 
-        // Verifica se o produto foi cadastrado
-        Produto produtoCerveja = produtoRepository.findByNome("Cerveja Teste").get(0);
-        assert produtoCerveja != null;
-        assert produtoCerveja.getNome().equals("Cerveja Teste");
+        // Verificar se o produto foi atualizado no MongoDB
+        MvcResult consultarResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/produtos/{id}", id))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Produto produtoAtualizado = objectMapper.readValue(consultarResult.getResponse().getContentAsString(), Produto.class);
+
+        // Verificar se as informações foram atualizadas corretamente
+        // Personalize isso com base nos campos do seu modelo
+        assert produtoAtualizado.getNome().equals(produtoAtualizadoDTO.getNome());
+        assert produtoAtualizado.getDescricao().equals(produtoAtualizadoDTO.getDescricao());
+        //assert produtoAtualizado.getPreco().equals(produtoAtualizadoDTO.getPreco());
     }
-
-  /*  @Test
-    public void testCadastrarProduto() throws Exception {
-        String cerveja = "{\"nome\":\"Cerveja\",\"preco\":5.99}";
-        String refrigerante = "{\"nome\":\"Refrigerante\",\"preco\":5.99}";
-        String agua = "{\"nome\":\"Cerveja\",\"preco\":5.99}";
-
-        cadastrarProduto(cerveja);
-        cadastrarProduto(refrigerante);
-        cadastrarProduto(agua);
-
-        // Verifica se os produtos foram cadastrados
-
-        Produto produtoCerveja = produtoRepository.findByNome("Cerveja");
-        assert produtoCerveja != null;
-
-        Produto produtoRefrigerante = produtoRepository.findByNome("Cerveja");
-        assert produtoRefrigerante != null;
-
-        Produto produtoAgua = produtoRepository.findByNome("Cerveja");
-        assert produtoRefrigerante != null;
-
-
-    }*/
     public void cadastrarProduto(String produtoJson) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/produtos/cadastrar")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -53,7 +53,7 @@ public class ProdutoService {
     }
 
 
-    public Produto atualizarProduto(String id, ProdutoDTO produtoAtualizado) {
+    public ProdutoDTO atualizarProduto(String id, ProdutoDTO produtoAtualizado) {
         // Verificar se o produto com o ID fornecido existe
         Produto produtoExistente = produtoRepository.findById(id).orElse(null);
 
@@ -64,7 +64,7 @@ public class ProdutoService {
             produtoExistente.setPreco(produtoAtualizado.getPreco());
 
             // Salvar o produto atualizado
-            return produtoRepository.save(produtoExistente);
+            return convertToDTO(produtoRepository.save(produtoExistente));
         } else {
             // Produto não encontrado
             return null;

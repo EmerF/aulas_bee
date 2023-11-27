@@ -87,3 +87,6 @@ https://www.docker.com/products/docker-desktop/
 ** Erro de header no docker-compose usar:
     DOCKER_BUILDKIT=0 docker-compose up --build -d
 ------------------------------------------------------------------------------------------------------------------------
+----- Rodar IT --------------
+1 - Fazer docker-compose build
+2 - Rodar os testes normalmente
