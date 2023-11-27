@@ -1,5 +1,6 @@
 package com.ambev.techempowers.it;
 
+import com.ambev.techempowers.dto.ProdutoDTO;
 import com.ambev.techempowers.model.Cerveja;
 import com.ambev.techempowers.model.Produto;
 import com.ambev.techempowers.repository.ProdutoRepository;
@@ -15,10 +16,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+//@SpringBootTest
+@SpringBootTest(classes = TestMongoConfig.class)
 @AutoConfigureMockMvc
 public class ProdutoControllerTest {
 
@@ -38,7 +41,7 @@ public class ProdutoControllerTest {
     @BeforeEach
     public void setUp() {
         // Limpar o banco de dados antes de cada teste
-        produtoRepository.deleteAll();
+       // produtoRepository.deleteAll();
     }
     @Test
     public void testRecursoNaoEncontrado() throws Exception {
@@ -47,13 +50,39 @@ public class ProdutoControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+
     @Test
     public void testCadastrarProdutoEVerificarCadastro() throws Exception {
-        Produto cerveja = new Cerveja();
+        ProdutoDTO produtoDTO = new ProdutoDTO();
+        produtoDTO.setNome("Test Product");
+        produtoDTO.setDescricao("Test Description");
+        produtoDTO.setPreco(9.99);
+        String produtoJson = objectMapper.writeValueAsString(produtoDTO);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/produtos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(produtoJson))
+                .andExpect(status().isOk());
+
+        // Verify if the product was saved in MongoDB
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/produtos/consultar/{nome}", "Test Product"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Assuming your controller returns a JSON array
+        String content = result.getResponse().getContentAsString();
+        // Validate the content as needed
+        // For example:
+        assert content.contains(produtoDTO.getNome());
+    }
+
+
+    @Test
+    public void testCadastrarProdutoEVerificarCadastro2() throws Exception {
+        ProdutoDTO cerveja = new ProdutoDTO();
         cerveja.setNome("Cerveja Teste");
         cerveja.setDescricao("Cerveja de teste");
         cerveja.setPreco(5.99);
-        ((Cerveja) cerveja).setTemAlcool(true);
         String produtoJson = objectMapper.writeValueAsString(cerveja);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/produtos")

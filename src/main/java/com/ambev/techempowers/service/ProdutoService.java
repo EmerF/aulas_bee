@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProdutoService {
@@ -43,8 +44,12 @@ public class ProdutoService {
 
     }
 
-    public List<Produto> consultarPorNome(String nome) {
-        return produtoRepository.findByNome(nome);
+    public List<ProdutoDTO> consultarPorNome(String nome) {
+        List<Produto> listaProdutosPorNome = produtoRepository.findByNome(nome);
+        List<ProdutoDTO> listaDTO = listaProdutosPorNome.stream()
+                .map(source -> modelMapper.map(source, ProdutoDTO.class))
+                .collect(Collectors.toList());
+        return listaDTO;
     }
 
 

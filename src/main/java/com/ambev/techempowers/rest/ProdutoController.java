@@ -45,15 +45,15 @@ public class ProdutoController {
     @PostMapping
     public ProdutoDTO cadastrarProduto(@RequestBody ProdutoDTO produto) {
         //eventProducer.sendProductSavedEvent(produto.getNome());
-        messageProducer.sendMessage(String.format("Produto %s cadastrado com sucesso !",produto.toString()));
+        //messageProducer.sendMessage(String.format("Produto %s cadastrado com sucesso !",produto.toString()));
         return produtoService.salvarProduto(produto);
     }
 
     @GetMapping("/consultar/{nome}")
-    public ResponseEntity<List<Produto>> consultarProdutos(@PathVariable String nome) {
-        List<Produto> produto = produtoService.consultarPorNome(nome);
-        if (produto != null) {
-            return ResponseEntity.ok(produto);
+    public ResponseEntity<List<ProdutoDTO>> consultarProdutos(@PathVariable String nome) {
+        List<ProdutoDTO> produtos = produtoService.consultarPorNome(nome);
+        if (produtos != null) {
+            return ResponseEntity.ok(produtos);
         } else {
             return ResponseEntity.notFound().build();
         }
