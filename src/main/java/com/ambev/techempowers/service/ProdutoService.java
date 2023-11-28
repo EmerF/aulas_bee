@@ -40,6 +40,7 @@ public class ProdutoService {
     }
 
     public Optional<Produto> findById(String id) {
+        produtoRepository.findByNome(id);
         return produtoRepository.findById(id);
 
     }
@@ -52,25 +53,27 @@ public class ProdutoService {
         return listaDTO;
     }
 
+    public ProdutoDTO atualizarProduto(String id, ProdutoDTO produtoDTO) {
+        Produto produtoExistente = produtoRepository.findById(id).
+                orElse(null);
+        if(produtoExistente != null){
+            produtoExistente.setNome(produtoDTO.getNome());
+            produtoExistente.setDescricao(produtoDTO.getDescricao());
+            produtoExistente.setPreco(produtoDTO.getPreco());
 
-    public ProdutoDTO atualizarProduto(String id, ProdutoDTO produtoAtualizado) {
-        // Verificar se o produto com o ID fornecido existe
-        Produto produtoExistente = produtoRepository.findById(id).orElse(null);
-
-        if (produtoExistente != null) {
-            // Atualizar os campos necessários
-            produtoExistente.setNome(produtoAtualizado.getNome());
-            produtoExistente.setDescricao(produtoAtualizado.getDescricao());
-            produtoExistente.setPreco(produtoAtualizado.getPreco());
-
-            // Salvar o produto atualizado
             return convertToDTO(produtoRepository.save(produtoExistente));
         } else {
-            // Produto não encontrado
             return null;
         }
+
     }
 
+    public boolean deletarProduto(String id) {
+        produtoRepository.deleteById(id);
+        Optional<Produto> produto = produtoRepository.findById(id);
+
+        return produto.isPresent();
+    }
 
 
     // Outros métodos de serviço, como buscar, atualizar e excluir produtos

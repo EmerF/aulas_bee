@@ -2,8 +2,6 @@ package com.ambev.techempowers.rest;
 
 import com.ambev.techempowers.dto.ProdutoDTO;
 import com.ambev.techempowers.message.MessageProducer;
-import com.ambev.techempowers.model.Produto;
-import com.ambev.techempowers.repository.ProdutoRepository;
 import com.ambev.techempowers.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,10 +21,19 @@ import java.util.List;
 
 
  /*curl -X POST -H "Content-Type: application/json" -d '{
-         "nome": "Produto de Exemplo",
+         "nome": "Produto1",
          "descricao": "desc de exemplo",
          "preco": 29.99
-         }' http://localhost:8080/api/produtos*/
+         }' http://localhost:8080/api/produtos
+
+curl -X PUT -H "Content-Type: application/json" -d '{
+  "nome": "Refrigerante",
+  "descricao": "descrição atualizada",
+  "preco": 5.99
+}' http://localhost:8080/api/produtos/656661f3d39ceb196168c866
+curl -X GET http://localhost:8080/api/produtos/consultar/Produto1
+curl -X DELETE http://localhost:8080/api/produtos/65666ed59311b05498e5ae88
+*/
 
 @RestController
 @RequestMapping("/api/produtos")
@@ -64,13 +71,24 @@ public class ProdutoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProdutoDTO> atualizarProduto(@PathVariable String id, @RequestBody ProdutoDTO produtoAtualizar) {
-        ProdutoDTO produtoAtual = produtoService.atualizarProduto(id, produtoAtualizar);
-        if (produtoAtual != null) {
-            return new ResponseEntity<>(produtoAtual, HttpStatus.OK);
-        } else {
+    public ResponseEntity<ProdutoDTO> atualizarProduto(@PathVariable String id,
+                                                       @RequestBody ProdutoDTO produtoDTO){
+        ProdutoDTO produtoAtualizado = produtoService.atualizarProduto
+                (id, produtoDTO);
+        if(produtoAtualizado != null){
+            return new ResponseEntity<>(produtoAtualizado, HttpStatus.OK);
+        }else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletarProduto(@PathVariable String id){
+        boolean deletado =  produtoService.deletarProduto(id);
+        if(deletado){
+            return ResponseEntity.ok("Produto deletado");
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado!");
+        }
+    }
 }
