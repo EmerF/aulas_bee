@@ -8,7 +8,8 @@ import org.springframework.data.mongodb.core.SimpleMongoClientDatabaseFactory;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @Configuration
-@EnableMongoRepositories(basePackages = "com.ambev.techempowers.repository")
+@EnableMongoRepositories(
+        basePackages = "com.ambev.techempowers.repository")
 @ComponentScan(basePackages = "com.ambev.techempowers")
 public class TestMongoConfig {
 
@@ -16,6 +17,7 @@ public class TestMongoConfig {
     public MongoTemplate mongoTemplate() {
         // You can customize the connection details for testing
         String testMongoUri = "mongodb://0.0.0.0:27017/meumongo";
-        return new MongoTemplate(new SimpleMongoClientDatabaseFactory(testMongoUri));
+        return new MongoTemplate(
+                new SimpleMongoClientDatabaseFactory(testMongoUri));
     }
 }

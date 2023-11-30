@@ -69,12 +69,15 @@ public class ProdutoService {
     }
 
     public boolean deletarProduto(String id) {
-        produtoRepository.deleteById(id);
-        Optional<Produto> produto = produtoRepository.findById(id);
+        Optional<Produto> produtoOptional = produtoRepository.findById(id);
 
-        return produto.isPresent();
+        if (produtoOptional.isPresent()) {
+            produtoRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
-    // Outros métodos de serviço, como buscar, atualizar e excluir produtos
 }

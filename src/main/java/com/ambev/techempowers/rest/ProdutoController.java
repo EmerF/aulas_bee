@@ -30,9 +30,10 @@ curl -X PUT -H "Content-Type: application/json" -d '{
   "nome": "Refrigerante",
   "descricao": "descrição atualizada",
   "preco": 5.99
+
 }' http://localhost:8080/api/produtos/656661f3d39ceb196168c866
 curl -X GET http://localhost:8080/api/produtos/consultar/Produto1
-curl -X DELETE http://localhost:8080/api/produtos/65666ed59311b05498e5ae88
+curl -X DELETE http://localhost:8080/api/produtos/6568ef1f65959e1816201662
 */
 
 @RestController
