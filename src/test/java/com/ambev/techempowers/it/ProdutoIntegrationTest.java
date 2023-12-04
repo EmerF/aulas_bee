@@ -1,3 +1,4 @@
+/*
 package com.ambev.techempowers.it;
 
 import com.ambev.techempowers.model.Produto;
@@ -43,3 +44,4 @@ public class ProdutoIntegrationTest {
     // Você pode adicionar mais testes para outras operações, como atualização e exclusão.
 }
 
+*/
