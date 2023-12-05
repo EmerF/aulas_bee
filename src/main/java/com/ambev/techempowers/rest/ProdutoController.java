@@ -60,7 +60,7 @@ public class ProdutoController {
     @GetMapping("/consultar/{nome}")
     public ResponseEntity<List<ProdutoDTO>> consultarProdutos(@PathVariable String nome) {
         List<ProdutoDTO> produtos = produtoService.consultarPorNome(nome);
-        if (produtos != null) {
+        if (null != produtos && !produtos.isEmpty()) {
             return ResponseEntity.ok(produtos);
         } else {
             return ResponseEntity.notFound().build();

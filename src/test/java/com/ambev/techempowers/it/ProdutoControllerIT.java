@@ -68,6 +68,20 @@ public class ProdutoControllerIT {
 
     }
 
+    @Test
+    public void testBuscarProdutoPeloNomeNaoEncontrado() throws Exception {
+        criarProdutoNaBase();
+        produtoDTO.setNome("Nome diferente!");
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/produtos/consultar/{nome}",
+                                produtoDTO.getNome()))
+                .andExpect(status().isNotFound())
+                .andReturn();
+        String ret = result.getResponse().getContentAsString();
+        assert ret.isEmpty();
+
+    }
+
     private void criarProdutoNaBase() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/produtos")
