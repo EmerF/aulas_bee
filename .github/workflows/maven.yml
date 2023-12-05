@@ -6,35 +6,33 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 name: Java CI with Maven
-
 on:
   push:
-    branches: ["IT"]
+    branches: [ "IT" ]
   pull_request:
-    branches: ["main"]
-  jobs:
-    integration-test:
-      runs-on: ubuntu-latest
-      services:
-        mongodb:
-          image: mongo:latest
-          ports:
-            - 27017:27017
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
+    branches: [ "main" ]
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:latest
+        ports:
+          - 27017:27017
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '17'
 
-        - name: Set up Java
-          uses: actions/setup-java@v2
-          with:
-            distribution: 'adopt'
-            java-version: '11'
-
-        - name: Build and test
-          run: |
-              ./mvnw clean verify -Dspring.data.mongodb.host=localhost -Dspring.data.mongodv.port=27017
-          env:
-            RABBIT_URI: ${{secrets.RABBIT_URI}}
+      - name: Build and test
+        run: |
+          ./mvnw clean verify -Dspring.data.mongodb.host=localhost -Dspring.data.mongodb.port=27017
+        env:
+          RABBITMQ_URI: ${{ secrets.RABBITMQ_URI }}
 
 
 
