@@ -1,14 +1,16 @@
 package com.ambev.techempowers.model;
 
 import jakarta.persistence.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 
 @Document
 public class Produto {
 
     @Id
     private String id;
+    @NotNull(message = "Informe o nome do produto")
     private String nome;
     private String descricao;
     private double preco;

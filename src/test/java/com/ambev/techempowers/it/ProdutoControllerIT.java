@@ -4,6 +4,8 @@ package com.ambev.techempowers.it;
 import com.ambev.techempowers.dto.ProdutoDTO;
 import com.ambev.techempowers.repository.ProdutoRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = TestMongoConfig.class)
@@ -57,6 +61,34 @@ public class ProdutoControllerIT {
     }
 
     @Test
+    public void testCadastrarProdutoNulo() throws Exception {
+        criarProdutoDTONomeNull();
+        produtoJson = objectMapper.writeValueAsString(produtoDTO);
+        criarProdutoNaBaseErroNulo();
+
+    }
+
+    private void criarProdutoNaBaseErroNulo() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/produtos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(produtoJson))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+        String responseBody = result.getResponse().getContentAsString();
+
+        // Assuming you are using a JSON library, like Jackson, to parse the response
+        /*JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+        // Assuming the validation error message is present in the "preco" field
+        String precoErrorMessage = jsonNode.at("/preco").asText();*/
+
+        // Use your testing library to assert the expected validation message
+        assertThat(responseBody, containsString("O preço deve ser maior que zero"));
+
+    }
+
+    @Test
     public void testDeletarUmProduto() throws Exception {
         criarProdutoNaBase();
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
@@ -94,14 +126,26 @@ public class ProdutoControllerIT {
     }
 
     private void criarProdutoDeTeste() throws JsonProcessingException {
-        produtoDTO = new ProdutoDTO();
-        produtoDTO.setNome("ProdutoIT");
-        produtoDTO.setDescricao("ProdutoIT descrição");
-        produtoDTO.setPreco(1.99);
+        criarProdutoDTO();
 
         produtoJson = objectMapper.writeValueAsString(produtoDTO);
 
     }
+
+    private void criarProdutoDTO() {
+        produtoDTO = new ProdutoDTO();
+        produtoDTO.setNome("ProdutoIT");
+        produtoDTO.setDescricao("ProdutoIT descrição");
+        produtoDTO.setPreco(1.99);
+    }
+
+    private void criarProdutoDTONomeNull() {
+        produtoDTO = new ProdutoDTO();
+        produtoDTO.setDescricao("ProdutoIT descrição");
+        produtoDTO.setPreco(0);
+    }
+
+
 
 
 }

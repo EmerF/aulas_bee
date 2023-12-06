@@ -3,6 +3,7 @@ package com.ambev.techempowers.rest;
 import com.ambev.techempowers.dto.ProdutoDTO;
 import com.ambev.techempowers.message.MessageProducer;
 import com.ambev.techempowers.service.ProdutoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,10 +53,10 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ProdutoDTO cadastrarProduto(@RequestBody ProdutoDTO produto) {
-        //eventProducer.sendProductSavedEvent(produto.getNome());
-        //messageProducer.sendMessage(String.format("Produto %s cadastrado com sucesso !",produto.toString()));
-        return produtoService.salvarProduto(produto);
+    //public ProdutoDTO cadastrarProduto(@RequestBody  @Valid ProdutoDTO produto, Errors errors) {
+    public ResponseEntity<ProdutoDTO> cadastrarProduto(@RequestBody  @Valid ProdutoDTO produto) {
+          //return produtoService.salvarProduto(produto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvarProduto(produto));
     }
 
     @GetMapping("/consultar/{nome}")
