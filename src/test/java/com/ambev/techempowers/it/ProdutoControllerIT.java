@@ -77,14 +77,8 @@ public class ProdutoControllerIT {
                 .andReturn();
         String responseBody = result.getResponse().getContentAsString();
 
-        // Assuming you are using a JSON library, like Jackson, to parse the response
-        /*JsonNode jsonNode = objectMapper.readTree(responseBody);
-
-        // Assuming the validation error message is present in the "preco" field
-        String precoErrorMessage = jsonNode.at("/preco").asText();*/
-
-        // Use your testing library to assert the expected validation message
-        assertThat(responseBody, containsString("O preço deve ser maior que zero"));
+       assertThat(responseBody, containsString("O preço deve ser maior que zero"));
+       assertThat(responseBody, containsString("Informe o nome do produto"));
 
     }
 
