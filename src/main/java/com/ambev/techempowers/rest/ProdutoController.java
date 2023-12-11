@@ -3,6 +3,7 @@ package com.ambev.techempowers.rest;
 import com.ambev.techempowers.dto.ProdutoDTO;
 import com.ambev.techempowers.message.MessageProducer;
 import com.ambev.techempowers.service.ProdutoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,12 @@ curl -X PUT -H "Content-Type: application/json" -d '{
 }' http://localhost:8080/api/produtos/656661f3d39ceb196168c866
 curl -X GET http://localhost:8080/api/produtos/consultar/Produto1
 curl -X DELETE http://localhost:8080/api/produtos/6568ef1f65959e1816201662
+
+curl -X POST -H "Content-Type: application/json" -d '{
+         "nome": "Produto1",
+         "descricao": "desc de exemplo",
+         "preco": 0
+         }' http://localhost:8080/api/produto
 */
 
 @RestController
@@ -52,9 +59,8 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ProdutoDTO cadastrarProduto(@RequestBody ProdutoDTO produto) {
-        //eventProducer.sendProductSavedEvent(produto.getNome());
-        //messageProducer.sendMessage(String.format("Produto %s cadastrado com sucesso !",produto.toString()));
+    public ProdutoDTO cadastrarProduto(@RequestBody @Valid ProdutoDTO produto) {
+
         return produtoService.salvarProduto(produto);
     }
 

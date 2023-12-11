@@ -4,6 +4,7 @@ package com.ambev.techempowers.it;
 import com.ambev.techempowers.dto.ProdutoDTO;
 import com.ambev.techempowers.repository.ProdutoRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -31,7 +37,7 @@ public class ProdutoControllerIT {
 
     private String produtoJson;
 
-    private ProdutoDTO produtoDTO ;
+    private ProdutoDTO produtoDTO;
     private ProdutoDTO produtoDTOReturn;
 
     @BeforeEach
@@ -39,6 +45,7 @@ public class ProdutoControllerIT {
         produtoRepository.deleteAll();
         criarProdutoDeTeste();
     }
+
 
     @Test
     public void testCadastrarProdutoEVerificar() throws Exception {
@@ -60,7 +67,7 @@ public class ProdutoControllerIT {
     public void testDeletarUmProduto() throws Exception {
         criarProdutoNaBase();
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/produtos/{id}", produtoDTOReturn.getId()))
+                        .delete("/api/produtos/{id}", produtoDTOReturn.getId()))
                 .andExpect(status().isOk())
                 .andReturn();
         String ret = result.getResponse().getContentAsString();
@@ -82,6 +89,32 @@ public class ProdutoControllerIT {
 
     }
 
+    @Test
+    public void testCadastrarProdutoInvalido() throws Exception {
+        criarProdutoDTOInvalido();
+        produtoJson = objectMapper.writeValueAsString(produtoDTO);
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/produtos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(produtoJson))
+                .andExpect(status().isBadRequest())
+                .andReturn();
+        String responseBody = result.getResponse().getContentAsString();
+
+        assertThat(responseBody, containsString("Informe o nome do produto"));
+        assertThat(responseBody, containsString("Descrição deve ter no mínimo 10 caracteres"));
+        assertThat(responseBody, containsString("O preço dever ser maior que 1"));
+
+    }
+
+
+    private void criarProdutoDTOInvalido() {
+        produtoDTO = new ProdutoDTO();
+        produtoDTO.setDescricao("Prod");
+        produtoDTO.setPreco(1);
+    }
+
+
     private void criarProdutoNaBase() throws Exception {
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                         .post("/api/produtos")
@@ -102,6 +135,8 @@ public class ProdutoControllerIT {
         produtoJson = objectMapper.writeValueAsString(produtoDTO);
 
     }
+
+
 
 
 }

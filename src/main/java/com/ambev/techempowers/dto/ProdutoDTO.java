@@ -1,10 +1,17 @@
 package com.ambev.techempowers.dto;
 
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class ProdutoDTO {
 
     private String id;
+    @NotBlank(message = "Informe o nome do produto")
     private String nome;
+    @Size(min = 10, message = "Descrição deve ter no mínimo 10 caracteres")
     private String descricao;
+    @DecimalMin(value = "1", message = "O preço dever ser maior que 1")
     private double preco;
 
     public String getNome() {
